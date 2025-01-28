@@ -1,6 +1,7 @@
 const { Employee } = require("../models");
 
 class EmployeeController {
+    
     async store(req, res) {
         try {
             const employee = await Employee.create(req.body);

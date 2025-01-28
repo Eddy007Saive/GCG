@@ -3,11 +3,19 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const employeeRoutes = require('./routes/employeeRoutes'); // Importer les routes
-const LeaveRoutes = require('./routes/LeaveRoutes'); // Importer les routes
-const LeaveTypeRoutes = require('./routes/LeaveTypeRoutes'); // Importer les routes
+const employeeRoutes = require('./routes/employeeRoutes'); 
+const LeaveRoutes = require('./routes/LeaveRoutes'); 
+const LeaveTypeRoutes = require('./routes/LeaveTypeRoutes'); 
+const cors = require('cors');
 
 const app = express();
+
+const corsOptions = {
+  origin: 'http://localhost:5173', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
 
 // Middleware pour logger les requêtes
 app.use(logger('dev'));
@@ -19,15 +27,14 @@ app.use(express.urlencoded({ extended: false }));
 // Middleware pour les cookies (si nécessaire)
 app.use(cookieParser());
 
-// Charger les routes pour les employés sous le préfixe `/api`
+// Charger les routes sous le préfixe `/api`
 app.use('/api', employeeRoutes);
 app.use('/api', LeaveRoutes);
 app.use('/api', LeaveTypeRoutes);
 
-
 // Gérer les erreurs 404 (route non trouvée)
 app.use((req, res, next) => {
-  next(createError(404)); // Cela passera au gestionnaire d'erreurs ci-dessous
+  next(createError(404, `Page non trouvée: ${req.originalUrl}`)); // Ajouter l'URL de la requête pour faciliter le débogage
 });
 
 // Gestionnaire d'erreurs global

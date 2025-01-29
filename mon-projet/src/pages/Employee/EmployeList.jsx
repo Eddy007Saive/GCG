@@ -1,50 +1,75 @@
-import React ,{useEffect}from "react";
+import React, { useEffect, useState } from "react";
 import { getEmployees } from "../../services/Employee";
-function EmployeList() {
-  const employees = [
-    { name: "Alice Dupont", role: "Développeur", department: "IT", salary: "€3,500" },
-    { name: "Jean Martin", role: "Designer", department: "Marketing", salary: "€2,800" },
-    { name: "Sophie Lambert", role: "Manager", department: "RH", salary: "€4,200" },
-  ];
+import {Link} from "react-router-dom"
 
-  useEffect(()=>{
-        getEmployees().then(res=>{
-          console.log(res)
-        }).catch(error=>{
-          console.log(error)
-        })
-     },[])
+function EmployeList() {
+  const [employees, setEmployees] = useState([]); 
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+
+  useEffect(() => {
+    getEmployees()
+      .then((res) => {
+        console.log(res.data); 
+        if (Array.isArray(res.data.data)) {
+          setEmployees(res.data.data); 
+        } else {
+          setEmployees([]);
+          setError("Les données des employés ne sont pas sous le bon format.");
+        }
+        setIsLoading(false); 
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement des employés :", error);
+        setError("Erreur lors du chargement des données.");
+        setIsLoading(false); 
+      });
+  }, []);
+
+  if (isLoading) {
+    return <p>Chargement des employés...</p>; 
+  }
+
+  if (error) {
+    return <p className="text-red-600">{error}</p>; 
+  }
+
+  if (employees.length === 0) {
+    return <p>Aucun employé trouvé.</p>; 
+  }
 
   return (
-   
-
-<div class="relative overflow-x-auto">
-<table className="w-full text-sm text-left text-gray-600">
-          <thead className="text-xs text-white uppercase bg-blue-600">
-            <tr>
-              <th scope="col" className="px-6 py-4">Nom</th>
-              <th scope="col" className="px-6 py-4">Rôle</th>
-              <th scope="col" className="px-6 py-4">Département</th>
-              <th scope="col" className="px-6 py-4">Salaire</th>
+    <div className="relative overflow-x-auto">
+      <h1 className="text-lg pb-4 font-bold ">Liste des employées</h1>
+      <div className="w-full flex-start flex pb-5 items-center  ">
+          <Link to="create">Nouveau</Link>
+      </div>
+      <table className="w-full text-sm text-left text-gray-600">
+        <thead className="text-xs text-white uppercase bg-blue-600">
+          <tr>
+            <th scope="col" className="px-6 py-4">Matricule</th>
+            <th scope="col" className="px-6 py-4">Nom</th>
+            <th scope="col" className="px-6 py-4">Adresse</th>
+            <th scope="col" className="px-6 py-4">Poste</th>
+            <th scope="col" className="px-6 py-4">Département</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employees.map((emp) => (
+            <tr
+              key={emp.id}
+              className="bg-white border-b transition duration-300 ease-in-out hover:bg-blue-50"
+            >
+              <td className="px-6 py-4">{emp.matricule}</td>
+              <td className="px-6 py-4 font-medium text-gray-900">{emp.nom}</td>
+              <td className="px-6 py-4">{emp.adresse}</td>
+              <td className="px-6 py-4">{emp.poste}</td>
+              <td className="px-6 py-4">{emp.departement}</td>
             </tr>
-          </thead>
-          <tbody>
-            {employees.map((emp, index) => (
-              <tr
-                key={index}
-                className="bg-white border-b transition duration-300 ease-in-out hover:bg-blue-50"
-              >
-                <th className="px-6 py-4 font-medium text-gray-900">{emp.name}</th>
-                <td className="px-6 py-4">{emp.role}</td>
-                <td className="px-6 py-4">{emp.department}</td>
-                <td className="px-6 py-4 font-semibold text-gray-700">{emp.salary}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        
-</div>
-
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 

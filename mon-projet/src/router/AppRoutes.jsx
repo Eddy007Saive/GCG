@@ -12,9 +12,12 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} >
-        <Route index element={<EmployeList />} ></Route>
-        <Route  path="create"  element={<EmployeCreate />} ></Route>
+          <Route  path="employe" element={<EmployeList />} >
+                <Route  index path="create"  element={<EmployeCreate />} ></Route>
+          </Route>
         </Route>
+        
+        
       </Routes>
     </Router>
   );

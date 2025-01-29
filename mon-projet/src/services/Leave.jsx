@@ -1,13 +1,12 @@
 import apiClient from "../utils/ApiClient";
-const url="/employees"
-
+const url="/conge"
 // Fonction pour récupérer tous les utilisateurs
-export const getEmployees = () => apiClient.get(`${url}`);
+export const getLeaves = () => apiClient.get(`${url}`);
 
-export const findEmploye = () => apiClient.get(`${url}/${id}`);
+export const findLeave = () => apiClient.get(`${url}/${id}`);
 
 // Fonction pour créer un utilisateur
-export const createEmploye= async (data) => {
+export const createLeave= async (data) => {
     try {
         const response=await apiClient.post(`${url}/create`, data);
         return response;
@@ -17,10 +16,7 @@ export const createEmploye= async (data) => {
 }
 
 // Fonction pour mettre à jour un utilisateur
-export const updateEmploye  = (id, data) => apiClient.put(`${url}/${id}`, data);
+export const updateLeave  = (id, data) => apiClient.put(`${url}/${id}`, data);
 
 // Fonction pour supprimer un utilisateur
-export const deleteEmploye  = (id) => apiClient.delete(`${url}/${id}`);
-
-
-
+export const deleteLeave  = (id) => apiClient.delete(`${url}/${id}`);

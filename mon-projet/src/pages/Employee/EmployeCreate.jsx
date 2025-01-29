@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
-import { createEmploye } from '../../services/Employee';
+import React, { useState } from "react";
+import { createEmploye } from "../../services/Employee";
 
 function EmployeCreate() {
-  const[formData,setFormData]=useState({
-    nom:"",
-    prenom:"",
-    tel:"",
-    sexe:"",
-    image:null,
-    poste:"",
-    dateN:"",
-    statu:"",
-    departement:"",
-    adresse:"",
-  })
+  const [formData, setFormData] = useState({
+    matricule: "",
+    nom: "",
+    prenom: "",
+    tel: "",
+    sexe: "",
+    image: null,
+    poste: "",
+    dateN: "",
+    statut: "",
+    departement: "",
+    adresse: "",
+  });
 
-  const handleChange=(e)=>{
-    const {name,value}=e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -31,50 +32,75 @@ function EmployeCreate() {
     });
   };
 
-  const handleSubmit=async()=>{
-    await createEmploye(formData).then(res => console.log(res)).catch(err => console.log(err))
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+              // Créer un objet FormData
+        const form = new FormData();
+        form.append("image", formData.image); // Fichier image
+      const response = await createEmploye(form);
+      console.log(response);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
-    <section className="bg-white dark:bg-gray-900">
+    <section className="bg-white dark:bg-gray-900 p-4 ">
       <div className="mx-auto max-w-4xl lg:py-16">
-        <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Ajouter un Employé</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Left: Image Upload */}
-          <div className="flex flex-col items-center ">
-            <div className="relative w-48 h-48 bg-gray-200 dark:bg-gray-700 overflow-hidden">
-            {formData.image && (
-              <img
-                src={URL.createObjectURL(formData.image)}
-                alt="Employer"
-                className=" w-full h-full"
+        <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
+          Ajouter un Employé
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1  gap-6">
+            {/* Left: Image Upload */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-48 h-48 bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                {formData.image && (
+                  <img
+                    src={URL.createObjectURL(formData.image)}
+                    alt="Employé"
+                    className="w-full h-full"
+                  />
+                )}
+              </div>
+              <label
+                htmlFor="image"
+                className="block mt-4 mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Image
+              </label>
+              <input
+                onChange={handleImageChange}
+                type="file"
+                id="image"
+                name="image"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                required
               />
-            )}
             </div>
-           
 
-          </div>
-
-          {/* Right: Form Inputs */}
-          <form action="#">
+            {/* Right: Form Inputs */}
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
               {/* Informations personnelles */}
+             
               <div className="w-full">
-                  <label
-                    htmlFor="nom"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Image
-                  </label>
-                  <input
-                    onChange={handleImageChange}
-                    type="file"
-                    id="nom"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="image"
-                    required
-                  />
-                </div>
+                <label
+                  htmlFor="nom"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Matricule
+                </label>
+                <input
+                  onChange={handleChange}
+                  value={formData.matricule}
+                  name="matricule"
+                  id="matricule"
+                  type="text"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required
+                />
+              </div>
               <div className="w-full">
                 <label
                   htmlFor="nom"
@@ -100,8 +126,8 @@ function EmployeCreate() {
                   Prénom
                 </label>
                 <input
-                 onChange={handleChange}
-                 value={formData.prenom}
+                  onChange={handleChange}
+                  value={formData.prenom}
                   type="text"
                   name="prenom"
                   id="prenom"
@@ -117,8 +143,8 @@ function EmployeCreate() {
                   Adresse
                 </label>
                 <input
-                 onChange={handleChange}
-                 value={formData.adresse}
+                  onChange={handleChange}
+                  value={formData.adresse}
                   type="text"
                   name="adresse"
                   id="adresse"
@@ -128,23 +154,22 @@ function EmployeCreate() {
               </div>
               <div className="w-full">
                 <label
-                  htmlFor="telephone"
+                  htmlFor="tel"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Téléphone
                 </label>
                 <input
-                onChange={handleChange}
-                value={formData.tel}
-                  type="text"
-                  name="telephone"
-                  id="telephone"
+                  onChange={handleChange}
+                  value={formData.tel}
+                  type="number"
+                  name="tel"
+                  id="tel"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required
                 />
               </div>
-
-              <div>
+              <div className="w-full">
                 <label
                   htmlFor="sexe"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -152,19 +177,21 @@ function EmployeCreate() {
                   Sexe
                 </label>
                 <select
-                onChange={handleChange}
-                value={formData.sexe}
+                  onChange={handleChange}
+                  value={formData.sexe}
+                  name="sexe"
                   id="sexe"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required
                 >
+                  <option value="">-- Sélectionnez --</option>
                   <option value="Homme">Homme</option>
                   <option value="Femme">Femme</option>
                 </select>
               </div>
-
               <div>
                 <label
-                  htmlFor="date_naissance"
+                  htmlFor="dateN"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Date de naissance
@@ -173,9 +200,9 @@ function EmployeCreate() {
                   onChange={handleChange}
                   value={formData.dateN}
                   type="date"
-                  name="date_naissance"
-                  id="date_naissance"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  name="dateN"
+                  id="dateN"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required
                 />
               </div>
@@ -215,8 +242,6 @@ function EmployeCreate() {
                   required
                 />
               </div>
-
-              {/* Statut */}
               <div>
                 <label
                   htmlFor="statut"
@@ -226,24 +251,29 @@ function EmployeCreate() {
                 </label>
                 <select
                   onChange={handleChange}
-                  value={formData.statu}
+                  value={formData.statut}
+                  name="statut"
                   id="statut"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required
                 >
+                  <option value="">-- Sélectionnez --</option>
                   <option value="Permanent">Permanent</option>
-                  <option value="Temporaire">Temporaire</option>
-                  <option value="Contrat">Contrat</option>
+                  <option value="Contractuel">Contractuel</option>
                 </select>
               </div>
             </div>
+          </div>
+          {/* Submit button */}
+          <div className="mt-6">
             <button
               type="submit"
-              className="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-300 dark:focus:ring-red-800 hover:bg-red-800"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
             >
               Ajouter
             </button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </section>
   );

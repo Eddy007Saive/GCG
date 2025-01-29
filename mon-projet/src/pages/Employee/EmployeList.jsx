@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getEmployees } from "../../services/Employee";
 import {Link} from "react-router-dom"
+// import { EyeIcon } from '@heroicons/react/solid';
 
 function EmployeList() {
   const [employees, setEmployees] = useState([]); 
@@ -35,7 +36,15 @@ function EmployeList() {
   }
 
   if (employees.length === 0) {
-    return <p>Aucun employé trouvé.</p>; 
+   
+    return (
+      <div>
+          <div className="w-full flex-start flex pb-5 items-center  ">
+            <Link to="create">Nouveau</Link>
+          </div>
+            <p>Aucun employé trouvé.</p>
+      </div>
+      ); 
   }
 
   return (
@@ -52,6 +61,8 @@ function EmployeList() {
             <th scope="col" className="px-6 py-4">Adresse</th>
             <th scope="col" className="px-6 py-4">Poste</th>
             <th scope="col" className="px-6 py-4">Département</th>
+            <th scope="col" className="px-6 py-4">Action</th>
+
           </tr>
         </thead>
         <tbody>
@@ -65,6 +76,12 @@ function EmployeList() {
               <td className="px-6 py-4">{emp.adresse}</td>
               <td className="px-6 py-4">{emp.poste}</td>
               <td className="px-6 py-4">{emp.departement}</td>
+              <td className="px-6 py-4">
+                <button>
+                <Link to={`/dashboard/employe/${emp.id}`}>Voir</Link>
+                </button>
+              </td>
+
             </tr>
           ))}
         </tbody>

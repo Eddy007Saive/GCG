@@ -10,25 +10,49 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nom: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique:true,
+        allowNull: false,
       },
       matricule: {
+        type: Sequelize.STRING,
+        unique:true,
+        allowNull: false,
+      },
+      image: {
         type: Sequelize.STRING
       },
       adresse: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       tel: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       poste: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      sexe: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      departement: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      dateN: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       date_embauche: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       statut: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

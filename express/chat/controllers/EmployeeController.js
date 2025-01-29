@@ -5,7 +5,7 @@ class EmployeeController {
     async store(req, res) {
         try {
             const employee = await Employee.create(req.body);
-            return res.status(201).json({ success: true, data: employee });
+            return res.status(201).json({ success: true, data: req.body });
         } catch (error) {
             console.error("Erreur lors de la création de l'employé : ", error);
             return res.status(500).json({ 

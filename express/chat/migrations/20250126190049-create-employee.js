@@ -54,6 +54,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+
+      leave_solde: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 2,
+    },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

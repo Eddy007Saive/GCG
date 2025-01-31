@@ -1,9 +1,11 @@
+const { where } = require("sequelize");
 const { Employee } = require("../models");
 
 class EmployeeController {
     
     async store(req, res) {
         try {
+            console.log(req.body);
             const employee = await Employee.create(req.body);
             return res.status(201).json({ success: true, data: req.body });
         } catch (error) {
@@ -15,6 +17,8 @@ class EmployeeController {
             });
         }
     }
+
+
 
     async getAll(req, res) {
         try {
@@ -28,6 +32,16 @@ class EmployeeController {
                 error: error.message 
             });
         }
+    }
+
+    async search(req, res){
+            const {matricule}=req.body
+            try {
+                const employee = await Employee.findAll({where:{matricule}});
+                return res.status(200).json({ success: true, data: employee });
+            } catch (error) {
+                
+            }
     }
 
     async getById(req, res) {

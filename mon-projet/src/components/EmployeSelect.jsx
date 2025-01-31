@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { getEmployee, getEmployees } from "../services/Employee";
+import { getEmployeById } from "../services/Employee";
 
 const EmployeSelect = () => {
   const [options, setOptions] = useState([]);
@@ -9,7 +9,7 @@ const EmployeSelect = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getEmployee(); // Assurez-vous que cette fonction retourne une promesse
+        const response = await getEmployeById(1); // Assurez-vous que cette fonction retourne une promesse
         console.log(response);
         
         // setOptions(formattedOptions);

@@ -22,6 +22,17 @@ export const createEmploye= async (data) => {
     }
 }
 
+export const getEmployeById=async (id)=>{
+    try {
+        const response=await apiClient.get(`${url}/${id}`)
+        return response.data
+    } catch (error) {
+        
+        console.log(error);
+        
+    }
+}
+
 // Fonction pour mettre à jour un utilisateur
 export const updateEmploye  = (id, data) => apiClient.put(`${url}/${id}`, data);
 

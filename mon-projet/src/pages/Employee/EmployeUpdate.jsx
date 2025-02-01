@@ -1,28 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { createEmploye, findEmploye } from "../../services/Employee";
+import React, { useState, useEffect } from "react";
+import { updateEmploye, getEmployeById } from "../../services/Employee";
 import { useParams } from "react-router-dom";
 
-function EmployeUpdate() {
-  const [employe,setEmploye]=useState(null)
-  const [loading,setLoaging]=useState(true)
-  const [error,setError]=useState(null)
-  const {id}=useParams()
-  useEffect(()=>{
-    console.log("Monter");
-    const fetchData=async ()=>{
-      try {
-        const response=await findEmploye(id)
-        setEmploye(response.data)
-      } catch (error) {
-          setError("Erreur lors de la recupération employé")
-      }
-    }
-    fetchData()
-    
-  },[id])
-
+function EmployeeUpdate() {
+  const { id } = useParams();
+  
   const [formData, setFormData] = useState({
-    matricule:"",
+    matricule: "",
     nom: "",
     prenom: "",
     tel: "",
@@ -33,11 +17,20 @@ function EmployeUpdate() {
     statut: "",
     departement: "",
     adresse: "",
-    date_embauche:""
+    date_embauche: ""
   });
 
-  
-
+  useEffect(() => {
+    const fetchEmploye = async () => {
+      try {
+        const response = await getEmployeById(id);
+        setFormData(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchEmploye();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +51,7 @@ function EmployeUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await createEmploye(formData);
+      const response = await updateEmploye(id, formData);
       console.log(response);
     } catch (err) {
       console.error(err);
@@ -66,13 +59,13 @@ function EmployeUpdate() {
   };
 
   return (
-    <section className="bg-white dark:bg-gray-900 p-4 ">
+    <section className="bg-white dark:bg-gray-900 p-4">
       <div className="mx-auto max-w-4xl lg:py-16">
         <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
-          Modification un Employé
+          Modifier un Employé
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1  gap-6">
+        <div className="grid grid-cols-1  gap-6">
             {/* Left: Image Upload */}
             <div className="flex flex-col items-center">
               <div className="relative w-48 h-48 bg-gray-200 dark:bg-gray-700 overflow-hidden">
@@ -302,8 +295,8 @@ function EmployeUpdate() {
               </div>
             </div>
           </div>
-          {/* Submit button */}
-          <div className="mt-6">
+             {/* Submit button */}
+             <div className="mt-6">
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
@@ -317,4 +310,4 @@ function EmployeUpdate() {
   );
 }
 
-export default EmployeUpdate;
+export default EmployeeUpdate;

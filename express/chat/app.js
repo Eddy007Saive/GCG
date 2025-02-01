@@ -18,7 +18,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Middleware pour logger les requêtes
-app.use(logger('dev'));
+app.use(logger('dev')); 
 
 // Middleware pour parser les requêtes JSON et URL-encoded
 app.use(express.json());

@@ -1,5 +1,5 @@
 const { where } = require("sequelize");
-const { Employee } = require("../models");
+const { Employee,Poste,Departement } = require("../models");
 
 class EmployeeController {
     
@@ -22,7 +22,16 @@ class EmployeeController {
 
     async getAll(req, res) {
         try {
-            const employees = await Employee.findAll();
+            const employees = await Employee.findAll({
+                include: [{
+                    model: Poste,
+                    as: 'poste',
+                    include: [{
+                        model: Departement,
+                        as: 'departement'   
+                    }]
+                }]
+            });
             return res.status(200).json({ success: true, data: employees });
         } catch (error) {
             console.error("Erreur lors de la récupération des employés : ", error);
@@ -33,6 +42,7 @@ class EmployeeController {
             });
         }
     }
+    
 
     async search(req, res){
             const {matricule}=req.body
@@ -46,7 +56,16 @@ class EmployeeController {
 
     async getById(req, res) {
         try {
-            const employee = await Employee.findByPk(req.params.id);
+            const employee = await Employee.findByPk(req.params.id,{
+                include: [{
+                    model: Poste,
+                    as: 'poste',
+                    include: [{
+                        model: Departement,
+                        as: 'departement'   
+                    }]
+                }]
+            });
             if (!employee) {
                 return res.status(404).json({ message: "Employé non trouvé" });
             }

@@ -8,8 +8,9 @@ import EmployeDetails from '../pages/Employee/EmployeDetails';
 import CongeList from '../pages/Conge/CongeList';
 import CongeCreate from '../pages/Conge/CongeCreate';
 import EmployeeUpdate from '../pages/Employee/EmployeUpdate';
-
-
+import PosteCreate from "../pages/Poste/PosteCreate"
+import DepartementCreate from "../pages/Departement/DepartementCreate"
+import CongeTypeCreate from "../pages/CongeType/CongeTypeCreate"
 function AppRoutes() {
   return (
     <Router>
@@ -22,6 +23,10 @@ function AppRoutes() {
         <Route path="employe/create" element={<EmployeCreate />} />
         <Route path="employe/update/:id" element={<EmployeeUpdate />} />
         <Route path="employe/:id" element={<EmployeDetails />} />
+        <Route path="poste" element={<PosteCreate />} />
+        <Route path="departement" element={<DepartementCreate />} />
+        <Route path="conge/type" element={<CongeTypeCreate />} />
+
       </Route>
     </Routes>
   </Router>

@@ -59,7 +59,6 @@ function CongeList() {
                     </svg>
                     <p>Nouveau</p>
                 </Link>
-                
             </div>
             <div className="w-full pb-4 flex">
             <form action="">

@@ -6,6 +6,10 @@ const logger = require('morgan');
 const employeeRoutes = require('./routes/employeeRoutes'); 
 const LeaveRoutes = require('./routes/LeaveRoutes'); 
 const LeaveTypeRoutes = require('./routes/LeaveTypeRoutes'); 
+const PosteRoutes = require('./routes/PosteRoutes'); 
+const departementRoutes = require('./routes/departementRoutes'); 
+
+
 const cors = require('cors');
 
 const app = express();
@@ -31,6 +35,10 @@ app.use(cookieParser());
 app.use('/api', employeeRoutes);
 app.use('/api', LeaveRoutes);
 app.use('/api', LeaveTypeRoutes);
+app.use('/api', PosteRoutes);
+app.use('/api', departementRoutes);
+
+
 
 // Gérer les erreurs 404 (route non trouvée)
 app.use((req, res, next) => {

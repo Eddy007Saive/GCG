@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'leaves' // alias pour l'accès aux congés d'un employé
       });
 
+      Employee.belongsTo(models.Poste, { foreignKey: 'posteId', as: 'poste' });
 
     }
   }
@@ -19,13 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     matricule: DataTypes.STRING,
     adresse: DataTypes.STRING,
     tel: DataTypes.STRING,
-    poste: DataTypes.STRING,
     date_embauche: DataTypes.DATE,
     statut: DataTypes.STRING,
     dateN:DataTypes.DATE,
     sexe:DataTypes.STRING,
     leave_solde:DataTypes.INTEGER,
-    departement:DataTypes.STRING,
+    posteId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Employee',

@@ -1,137 +1,140 @@
-import React, { useState } from 'react'
-import EmployeSelect from '../../components/EmployeSelect';
+import React from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ErrorMessage } from "@hookform/error-message";
+import { congeSchema } from "../../validations/congeSchema";
+import EmployeSelect from "../../components/EmployeSelect";
 
-function CongeCreate() {
-  const [formData,setFormData]=useState({
-    employee_id: null,
-    leave_type_id: null,
-    date_debut: "",
-    date_fin: "",
-    jours_pris: 0,
-    motif: "",
-    status: "",
-  })
+const CongeCreate = () => {
+  const methods = useForm({
+    resolver: yupResolver(congeSchema),
+  });
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    };
-  
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        const response = await createEmploye(formData);
-        console.log(response);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-  
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },reset
+  } = methods;
+
+  const onSubmit = async (data) => {
+    console.log("Form Data:", data);
+    try {
+      const response = await createEmploye(data);
+      console.log(response);
+      reset()
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <div className="w-full flex justify-center ">
-        
-        <form className='grid grid-cols-1 w-full gap-6 bg-white shadow-lg p-4 '  action="">
-        <h2 className="mb-8 text-2xl font-bold text-gray-900 dark:text-white">
-         Congé
-        </h2>
-        <EmployeSelect />
-        <div className="w-full">
-                <label
-                  htmlFor="nom"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Employe
-                </label>
-                <input
-                  onChange={handleChange}
-                  value={formData.employee_id}
-                  name="employee_id"
-                  id="employee_id"
-                  type="text"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  required
-                />
-          </div>
-        <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+    <div className="w-full flex justify-center">
+      <FormProvider {...methods}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-1 w-full gap-6 bg-white shadow-lg p-4"
+        >
+          <h2 className="mb-8 text-2xl font-bold text-gray-900">Congé</h2>
+
+          {/* Sélection de l'employé */}
+          <EmployeSelect
+            onChange={(option) => setValue("employee_id", option?.value)}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="employee_id"
+            as="p"
+            className="text-red-500"
+          />
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+
             <div className="w-full">
-                  <label
-                    htmlFor="nom"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Date début
-                  </label>
-                  <input
-                    onChange={handleChange}
-                    value={formData.date_debut}
-                    name="date_debut"
-                    id="date_debut"
-                    type="date"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    required
-                  />
+              {/* Dates de début et de fin */}
+              <input
+                type="date"
+                {...register("date_debut")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              />
+              <ErrorMessage
+                errors={errors}
+                name="date_debut"
+                as="p"
+                className="text-red-500"
+              />
             </div>
+
             <div className="w-full">
-                  <label
-                    htmlFor="nom"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Date fin
-                  </label>
-                  <input
-                    onChange={handleChange}
-                    value={formData.date_fin}
-                    name="date_fin"
-                    id="date_fin"
-                    type="date"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    required
-                  />
+            <input
+            type="date"
+            {...register("date_fin")}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          />
+          <ErrorMessage
+            errors={errors}
+            name="date_fin"
+            as="p"
+            className="text-red-500"
+          />
             </div>
           </div>
 
-         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+
+          <div  className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+
 
           <div className="w-full">
-                <label
-                  htmlFor="nom"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Nombre de jours
-                </label>
+              {/* Sélection du type de congé */}
+              <select
+                {...register("leave_type_id")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              >
+                <option value="">Sélectionner un type de congé</option>
+                <option value="1">Congé Annuel</option>
+                <option value="2">Congé Maladie</option>
+              </select>
+              <ErrorMessage
+                errors={errors}
+                name="leave_type_id"
+                as="p"
+                className="text-red-500"
+              />
+            </div>
+
+            <div className="w-full">
+                {/* Nombre de jours */}
                 <input
-                  onChange={handleChange}
-                  value={formData.jours_pris}
+                  type="number"
+                  {...register("jours_pris")}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                />
+                <ErrorMessage
+                  errors={errors}
                   name="jours_pris"
-                  id="jours_pris"
-                  type="number"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  required
+                  as="p"
+                  className="text-red-500"
                 />
+            </div>
           </div>
+          
 
-          <div className="w-full">
-                <label
-                  htmlFor="nom"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Motifs
-                </label>
-                <textarea
-                  onChange={handleChange}
-                  value={formData.motif}
-                  name="motif"
-                  id="motif"
-                  type="number"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  required
-                ></textarea>
-          </div>
-         </div>
-          {/* Submit button */}
+
+        
+
+
+          {/* Motif */}
+          <textarea
+            {...register("motif")}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+          ></textarea>
+          <ErrorMessage
+            errors={errors}
+            name="motif"
+            as="p"
+            className="text-red-500"
+          />
+
+          {/* Bouton Soumettre */}
           <div className="mt-6">
             <button
               type="submit"
@@ -141,8 +144,9 @@ function CongeCreate() {
             </button>
           </div>
         </form>
+      </FormProvider>
     </div>
-  )
-}
+  );
+};
 
-export default CongeCreate
+export default CongeCreate;
